@@ -377,7 +377,7 @@ client.on ('message', async msg => {
 
             case "3":
                 await enviarMensagemInicial(capa_site, '*Obrigado por utilizar nosso atendimento!*\n\n_Até a próxima!_ 👋');
-                delete state[from];
+                state[from] = { step: 5 };
                 return;
 
               
@@ -463,7 +463,20 @@ client.on ('message', async msg => {
                 }
                 return;
         }
+    }else if (userState.step === 5){
+        if (saudacoes.some(ignorar => msg.body.includes(ignorar))){
+            await delay(2700000);
+            delete state[from];
+            return;
+       
+        }else if(!saudacoes.some(ignorando => msg.body.includes(ignorando))){
+            await delay(2700000);
+            delete state[from];
+            return;
+
+        }
     }
+    
 });
 
 
