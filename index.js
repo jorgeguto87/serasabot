@@ -120,7 +120,7 @@ client.on ('message', async msg => {
     const logo = MessageMedia.fromFilePath('./assets/capa.jpg');
     const sauda = saudacao();
     const atendimento = atendente();
-    const mensagemInicial = `😃 ${sauda} ${nome}!\n\n*📌 Seja bem vindo ao atendimento Serasa Experian!*\n_Canal exclusivo para regularização de débitos com rede de máquinas de cartão._\n\n💁‍♀️ *Como posso ajudar?*\n\n➡️ Por favor, digite o *NÚMERO* de uma das opções abaixo:\n\n1️⃣ *- Operadora*\n2️⃣ *- Acordo de Débitos*\n3️⃣ *- Maquininha/Débitos e Créditos*\n4️⃣ *- Baixa de Débitos*\n5️⃣ *- Certificado Digital*\n6️⃣ *- Carteira Digital Serasa*\n7️⃣ *- Tudo Sobre Score*\n8️⃣ *- Negocie e Limpe seu Nome*\n9️⃣ *- Ação Judicial Serasa*\n\n*Tribunal de Justiça*\nhttps://www.tjsp.jus.br`;
+    const mensagemInicial = `😃 ${sauda} ${nome}!\n\n*📌 Seja bem vindo ao atendimento Serasa Experian!*\n_Canal exclusivo para regularização de débitos com rede de máquinas de cartão._\n\n💁‍♀️ *Como posso ajudar?*\n\n➡️ Por favor, digite o *NÚMERO* de uma das opções abaixo:\n\n1️⃣ *- Operadora*\n2️⃣ *- Acordo de Débitos*\n3️⃣ *- Maquininha/Débitos e Créditos*\n4️⃣ *- Baixa de Débitos*\n5️⃣ *- Certificado Digital*\n6️⃣ *- Carteira Digital Serasa*\n7️⃣ *- Tudo Sobre Score*\n8️⃣ *- Negocie e Limpe seu Nome*\n9️⃣ *- Ação Judicial Serasa*\n1️⃣0️⃣ *-Consulta protocolo*\n\n*Tribunal de Justiça*\nhttps://www.tjsp.jus.br`;
     const imgCartDigital = MessageMedia.fromFilePath('./assets/carteira_digital.jpg');
     const cielo = MessageMedia.fromFilePath('./assets/cielo.jpg');
     const sumup = MessageMedia.fromFilePath('./assets/sumup.jpg');
@@ -221,6 +221,11 @@ client.on ('message', async msg => {
                 await enviarMensagemInicial(capa_site, '⚖️ *Acão Judicial Serasa*\n\nPara tratar sobre ações judiciais do serasa, será necessário direcionar o seu atendimento para um de nossos especialistas.');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
+                return;
+
+            case "10":
+                await enviarMensagemInicial(capa_site, '*Perfeito*\n\nDigite o número do seu protocolo abaixo por favor:');
+                state[from] = { step: 6 };
                 return;
 
             default:
@@ -475,6 +480,34 @@ client.on ('message', async msg => {
             return;
 
         }
+    }else if (userState.step === 6) {
+        const protocoloBuscado = msg.body.trim();
+    
+        fs.readFile('data.txt', 'utf-8', async (err, data) => {
+            if (err) {
+                await enviarMensagemTexto('❌ Erro ao ler os dados. Tente novamente mais tarde.');
+                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+                state[from] = { step: 3 };
+                return;
+            }
+    
+            const linhas = data.split('\n').filter(l => l.trim() !== '');
+            const resultado = linhas.find(linha => linha.startsWith(protocoloBuscado + ';'));
+    
+            if (!resultado) {
+                await enviarMensagemTexto('🔍 Protocolo não encontrado. Verifique o número e tente novamente.');
+                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+                state[from] = { step: 3 };
+                return;
+            }
+    
+            const [protocolo, nome, cnpj, mensagemCliente] = resultado.split(';');
+    
+            await enviarMensagemTexto(`📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* ${mensagemCliente}`);
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
+        });
+        return;
     }
     
 });
