@@ -64,6 +64,35 @@ app.post('/apagar', (req, res) => {
     });
 });
 
+// Rota para alterar a mensagem do cliente
+app.post('/alterar', (req, res) => {
+    const { cnpj, novaMensagem } = req.body;
+
+    fs.readFile('data.txt', 'utf-8', (err, data) => {
+        if (err) return res.status(500).send('Erro ao ler dados');
+
+        let linhas = data.trim().split('\n');
+        let encontrado = false;
+
+        linhas = linhas.map(linha => {
+            const partes = linha.split(';');
+            if (partes[2] === cnpj) {
+                encontrado = true;
+                partes[3] = novaMensagem; // atualiza a mensagem
+                return partes.join(';');
+            }
+            return linha;
+        });
+
+        if (!encontrado) return res.status(404).send('Cliente não encontrado');
+
+        fs.writeFile('data.txt', linhas.join('\n') + '\n', err => {
+            if (err) return res.status(500).send('Erro ao salvar mensagem alterada');
+            res.send('Mensagem alterada com sucesso');
+        });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

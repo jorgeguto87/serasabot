@@ -6,7 +6,7 @@ const ngrok = require('ngrok');
 const { Client, LocalAuth, MessageTypes, MessageMedia } = require('whatsapp-web.js');
 
 const app = express();
-const PORT = 8080;
+const PORT = 4000;
 
 let qrBase64 = '';
 let isConnected = false;
@@ -23,7 +23,10 @@ app.get('/status', (req, res) => {
 
 // Inicializa o WhatsApp Client
 const client = new Client({
-  authStrategy: new LocalAuth({clientId: "serasa"})
+  authStrategy: new LocalAuth({clientId: "serasa"}),
+  puppeteer: {
+       args: ['--no-sandbox', '--disable-setuid-sandbox']
+  }
 });
 
 client.on('qr', async qr => {
@@ -41,7 +44,7 @@ app.listen(PORT, async () => {
   const url = await ngrok.connect({
     proto: 'http',
     addr: PORT,
-    authtoken: '2vjEpKyfP0oW0HV4B7aqHnwG050_22NcP2hG9sYbZdzgqR5Xe'
+    authtoken: '2xKwXMabicFsFQOYIn3sMTsJku7_4zo4mQzhjqqrabmL1SkhQ'
   });
 
   console.log(`🌐 Acesse o QR Code em: ${url}`);
@@ -54,9 +57,9 @@ function saudacao() {
     const data = new Date();
     let hora = data.getHours();
     let str = '';
-    if (hora >= 6 && hora < 12) {
+    if (hora >= 9 && hora < 15) {
         str = '*Bom dia,*';
-    } else if (hora >= 12 && hora < 18) {
+    } else if (hora >= 15 && hora < 21) {
         str = '*Boa tarde,*';
     } else {
         str = '*Boa noite,*';
@@ -371,7 +374,7 @@ client.on ('message', async msg => {
         switch(mensagem) {
             case "1":
                 await enviarMensagemTexto(`${atendimento}`);
-                delete state[from];
+                state[from] = { step: 5 };
                 return;
 
             case "2":
@@ -382,7 +385,7 @@ client.on ('message', async msg => {
 
             case "3":
                 await enviarMensagemInicial(capa_site, '*Obrigado por utilizar nosso atendimento!*\n\n_Até a próxima!_ 👋');
-                state[from] = { step: 5 };
+                delete state[from];
                 return;
 
               
