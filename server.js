@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 // Servir protocolo.html manualmente
 app.get('/protocolo', (req, res) => {
     console.log('Rota /protocolo acessada');
-    res.sendFile(__dirname, 'public', 'protocolo.html');
+    res.sendFile(path.join(__dirname, 'public', 'protocolo.html'));
 });
 
 // Rota para salvar dados no arquivo
