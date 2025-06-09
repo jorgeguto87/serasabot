@@ -17,8 +17,8 @@ app.get('/protocolo', (req, res) => {
 
 // Rota para salvar dados no arquivo
 app.post('/salvar', (req, res) => {
-    const { protocolo, nome, cnpj, mensagem } = req.body;
-    const linha = `${protocolo};${nome};${cnpj};${mensagem}\n`;
+    const { protocolo, nome, cnpj, mensagem, mensPadrao } = req.body;
+    const linha = `${protocolo};${nome};${cnpj};${mensagem};${mensPadrao}\n`;
 
     fs.appendFile('data.txt', linha, (err) => {
         if (err) {
@@ -41,8 +41,8 @@ app.post('/consultar', (req, res) => {
 
         if (!cliente) return res.status(404).send('Cliente não encontrado');
 
-        const [protocolo, nome, cnpjEncontrado, mensagem] = cliente.split(';');
-        res.json({ protocolo, nome, cnpj: cnpjEncontrado, mensagem });
+        const [protocolo, nome, cnpjEncontrado, mensagem, msgPadrao] = cliente.split(';');
+        res.json({ protocolo, nome, cnpj: cnpjEncontrado, mensagem, msgPadrao: msgPadrao.toString() === 'true' });
     });
 });
 
@@ -66,7 +66,7 @@ app.post('/apagar', (req, res) => {
 
 // Rota para alterar a mensagem do cliente
 app.post('/alterar', (req, res) => {
-    const { cnpj, novaMensagem } = req.body;
+    const { cnpj, novaMensagem, msgPadrao } = req.body;
 
     fs.readFile('data.txt', 'utf-8', (err, data) => {
         if (err) return res.status(500).send('Erro ao ler dados');
@@ -78,7 +78,8 @@ app.post('/alterar', (req, res) => {
             const partes = linha.split(';');
             if (partes[2] === cnpj) {
                 encontrado = true;
-                partes[3] = novaMensagem; // atualiza a mensagem
+                partes[3] = novaMensagem;
+                partes[4] = msgPadrao ? 'true' : 'false'; 
                 return partes.join(';');
             }
             return linha;

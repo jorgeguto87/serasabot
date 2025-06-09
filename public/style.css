@@ -73,6 +73,23 @@ body {
     font-size: 14px;
 }
 
+.check__msg{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.check{
+    cursor:pointer;
+    width: 1rem;
+    height: 1rem;
+}
+
+.check__label{
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
 .input_mensagem {
     height: 100px;
     resize: none;

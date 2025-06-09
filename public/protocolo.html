@@ -35,6 +35,11 @@
                 <section class="principal_mensagem">
                     <textarea id="campo_mensagem" placeholder="Adicione a mensagem ao cliente" class="input_mensagem"></textarea>
                 </section>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoPadrao" name="msg" onclick="msgPadrao()">
+                    <p class="check__label">Mensagem padrão</p>
+                    <p class="check__label" id="msgPadrao">Desabilitada</p>
+                </div>
 
                 <section class="principal_inserir">
                     <button class="botao_principal" id="btn_inserir_dados">Inserir</button>
@@ -54,6 +59,11 @@
             <div class="caixa_resultado_consulta">    
                 <h2 class="resultado_consulta"></h2>
                 <textarea id="campo_mensagem_alterar" placeholder="Adicione uma mensagem para alterar" class="input_mensagem_alterar"></textarea>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoPadraoConsulta" name="msg" onclick="msgPadrao()">
+                    <p class="check__label">Mensagem padrão</p>
+                    <p class="check__label" id="msgPadraoEsp"></p>
+                </div>
                 <div class="botoes_alteracao">
                 <button class="botao_principal" id="btn_alterar">Alterar Mensagem</button>
                 <button class="botao_principal" id="btn_apagar">Apagar Cliente</button>
