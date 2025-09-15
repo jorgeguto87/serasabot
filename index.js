@@ -551,62 +551,86 @@ client.on('message', async msg => {
 
         }
     } else if (userState.step === 6) {
-        const protocoloBuscado = msg.body.trim();
+    const protocoloBuscado = msg.body.trim();
 
-        fs.readFile('data.txt', 'utf-8', async (err, data) => {
-            if (err) {
-                await enviarMensagemTexto('❌ Erro ao ler os dados. Tente novamente mais tarde.');
-                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
-                state[from] = { step: 3 };
-                return;
-            }
+    fs.readFile('data.txt', 'utf-8', async (err, data) => {
+        if (err) {
+            await enviarMensagemTexto('❌ Erro ao ler os dados. Tente novamente mais tarde.');
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
+            return;
+        }
 
-            const linhas = data.split('\n').filter(l => l.trim() !== '');
-            const resultado = linhas.find(linha => linha.startsWith(protocoloBuscado + ';'));
+        const linhas = data.split('\n').filter(l => l.trim() !== '');
+        const resultado = linhas.find(linha => linha.startsWith(protocoloBuscado + ';'));
 
-            if (!resultado) {
-                await enviarMensagemTexto('🔍 Protocolo não encontrado. Verifique o número e tente novamente.');
-                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
-                state[from] = { step: 3 };
-                return;
-            }
+        if (!resultado) {
+            await enviarMensagemTexto('🔍 Protocolo não encontrado. Verifique o número e tente novamente.');
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
+            return;
+        }
 
-            const [protocolo, nome, cnpj, mensagemCliente, msgPadrao, pixUm, pixDois] = resultado.split(';');
-            const imagemBaixado = MessageMedia.fromFilePath('./assets/img_baixado.jpg');
+        const campos = resultado.split(';');
+        const [protocolo, nome, cnpj, mensagemCliente, msgPadrao, pixUm, pixDois] = campos;
+        
+        // Verifica se existem os novos campos (compatibilidade com dados antigos)
+        const neonProcessamento = campos[7] || 'false';
+        const neonConfirmado = campos[8] || 'false';
+        const coraProcessamento = campos[9] || 'false';
+        const coraConfirmado = campos[10] || 'false';
 
-            if (msgPadrao === 'true') {
-                await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
-                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
-                state[from] = { step: 3 };
+        const imagemBaixado = MessageMedia.fromFilePath('./assets/img_baixado.jpg');
 
-            } else if (pixUm === 'true') {
-                await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
-                enviarMensagemInicial(imagemPix, msgPix);
-                enviarMensagemTexto(linkPixUm);
-                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
-                state[from] = { step: 3 };
+        // Verifica primeiro as condições das mensagens Neon e Cora
+        if (neonProcessamento === 'true') {
+            await msgNeonAnalise();
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
 
-            } else if (pixDois === 'true') {
-                await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
-                enviarMensagemInicial(imagemPix, msgPix);
-                enviarMensagemTexto(linkPixDois);
-                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
-                state[from] = { step: 3 };
+        } else if (neonConfirmado === 'true') {
+            await msgNeonConfirmado();
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
 
-            } else {
-                await enviarMensagemTexto(`📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* ${mensagemCliente}`);
-                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
-                state[from] = { step: 3 };
-            }
+        } else if (coraProcessamento === 'true') {
+            await msgCoraAnalise();
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
 
+        } else if (coraConfirmado === 'true') {
+            await msgCoraConfirmado();
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
 
+        // Condições existentes (msgPadrao, pixUm, pixDois)
+        } else if (msgPadrao === 'true') {
+            await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
 
+        } else if (pixUm === 'true') {
+            await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
+            enviarMensagemInicial(imagemPix, msgPix);
+            enviarMensagemTexto(linkPixUm);
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
 
+        } else if (pixDois === 'true') {
+            await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
+            enviarMensagemInicial(imagemPix, msgPix);
+            enviarMensagemTexto(linkPixDois);
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
 
-        });
-        return;
-    }
-
+        } else {
+            await enviarMensagemTexto(`📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* ${mensagemCliente}`);
+            await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+            state[from] = { step: 3 };
+        }
+    });
+    return;
+}
 });
 
 

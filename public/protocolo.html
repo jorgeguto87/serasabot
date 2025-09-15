@@ -47,6 +47,16 @@
                     <p class="check__label">Enviar cobrança</p>
                     <p class="check__label" id="msgCobranca">Desabilitada</p>
                 </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoNeon" name="msg" onclick="msgNeon()">
+                    <p class="check__label">Mensagem Neon</p>
+                    <p class="check__label" id="msgNeon">Desabilitada</p>
+                </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoCora" name="msg" onclick="msgCora()">
+                    <p class="check__label">Mensagem Cora</p>
+                    <p class="check__label" id="msgCora">Desabilitada</p>
+                </div>
                 </div>
 
                 <section class="principal_inserir">
@@ -77,6 +87,16 @@
                     <input class="check" type="checkbox" id="campoCobrancaConsulta" name="msg" onclick="msgCobranca()">
                     <p class="check__label">Enviar cobrança</p>
                     <p class="check__label" id="msgCobrancaEsp"></p>
+                </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoNeonConsulta" name="msg" onclick="msgNeon()">
+                    <p class="check__label">Mensagem Neon</p>
+                    <p class="check__label" id="msgNeonEsp"></p>
+                </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoCoraConsulta" name="msg" onclick="msgCora()">
+                    <p class="check__label">Mensagem Cora</p>
+                    <p class="check__label" id="msgCoraEsp"></p>
                 </div>
                 </div>
                 <div class="botoes_alteracao">
@@ -109,7 +129,45 @@
                     <p class="check__label">admnegociacao7@gmail.com</p>
                     <p class="check__label" id="msgPixDois"></p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!--MODAL NEON-->
+    <div class="container__modalCobranca" id="modalNeon">
+        <div class="modalCobranca__conteudo">
+            <span class="modalCobranca__fechar" onclick="fecharModalNeon()">&times;</span>
+            <img src="s_serasa.png" alt="Logo Serasa" class="modalCobranca__logo">
+            <h2 class="texto__modalCobranca__titulo">Selecione a mensagem Neon</h2>
+            <div class="container__check">
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="neonProcessamento" name="msg">
+                    <p class="check__label">Mensagem em processamento</p>
                 </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="neonConfirmado" name="msg">
+                    <p class="check__label">Mensagem confirmado</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--MODAL CORA-->
+    <div class="container__modalCobranca" id="modalCora">
+        <div class="modalCobranca__conteudo">
+            <span class="modalCobranca__fechar" onclick="fecharModalCora()">&times;</span>
+            <img src="s_serasa.png" alt="Logo Serasa" class="modalCobranca__logo">
+            <h2 class="texto__modalCobranca__titulo">Selecione a mensagem Cora</h2>
+            <div class="container__check">
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="coraProcessamento" name="msg">
+                    <p class="check__label">Mensagem em processamento</p>
+                </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="coraConfirmado" name="msg">
+                    <p class="check__label">Mensagem confirmado</p>
+                </div>
+            </div>
         </div>
     </div>
 

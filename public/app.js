@@ -14,6 +14,19 @@ const campoMsgCobrancaConsulta = document.getElementById('msgCobrancaEsp');
 const chavePixUm = document.getElementById('chavePixUm');
 const chavePixDois = document.getElementById('chavePixDois');
 
+// Novos elementos para Neon
+const modalNeon = document.getElementById('modalNeon');
+const checkNeonConsulta = document.getElementById('campoNeonConsulta');
+const campoMsgNeonConsulta = document.getElementById('msgNeonEsp');
+const neonProcessamento = document.getElementById('neonProcessamento');
+const neonConfirmado = document.getElementById('neonConfirmado');
+
+// Novos elementos para Cora
+const modalCora = document.getElementById('modalCora');
+const checkCoraConsulta = document.getElementById('campoCoraConsulta');
+const campoMsgCoraConsulta = document.getElementById('msgCoraEsp');
+const coraProcessamento = document.getElementById('coraProcessamento');
+const coraConfirmado = document.getElementById('coraConfirmado');
 
 //Habilitar mensagem Cobranca
 function msgCobranca() {
@@ -28,13 +41,54 @@ function msgCobranca() {
     }
 }
 
+//Habilitar mensagem Neon
+function msgNeon() {
+    if (document.getElementById('campoNeon').checked) {
+        document.getElementById('msgNeon').textContent = 'Habilitada';
+        document.getElementById('modalNeon').style.display = 'flex';
+    } else if(document.getElementById('campoNeonConsulta').checked) { 
+        document.getElementById('msgNeonEsp').textContent = 'Habilitada';
+        document.getElementById('modalNeon').style.display = 'flex';
+    } else {
+        document.getElementById('msgNeon').textContent = 'Desabilitada';
+    }
+}
+
+//Habilitar mensagem Cora
+function msgCora() {
+    if (document.getElementById('campoCora').checked) {
+        document.getElementById('msgCora').textContent = 'Habilitada';
+        document.getElementById('modalCora').style.display = 'flex';
+    } else if(document.getElementById('campoCoraConsulta').checked) { 
+        document.getElementById('msgCoraEsp').textContent = 'Habilitada';
+        document.getElementById('modalCora').style.display = 'flex';
+    } else {
+        document.getElementById('msgCora').textContent = 'Desabilitada';
+    }
+}
+
 function fecharModalCobranca() {
     document.getElementById('modalCobranca').style.display = 'none';
 }
 
+function fecharModalNeon() {
+    document.getElementById('modalNeon').style.display = 'none';
+}
+
+function fecharModalCora() {
+    document.getElementById('modalCora').style.display = 'none';
+}
+
+// Fechar modais clicando fora
 window.addEventListener('click', function(event){
     if (event.target === modalCobranca){
         fecharModalCobranca();
+    }
+    if (event.target === modalNeon){
+        fecharModalNeon();
+    }
+    if (event.target === modalCora){
+        fecharModalCora();
     }
 });
 
@@ -62,7 +116,11 @@ document.getElementById('btn_inserir_dados').addEventListener('click', () => {
         mensagem: campoMensagem.value,
         mensPadrao: document.getElementById('campoPadrao').checked,
         pixUm: document.getElementById('chavePixUm').checked,
-        pixDois: document.getElementById('chavePixDois').checked
+        pixDois: document.getElementById('chavePixDois').checked,
+        neonProcessamento: document.getElementById('neonProcessamento').checked,
+        neonConfirmado: document.getElementById('neonConfirmado').checked,
+        coraProcessamento: document.getElementById('coraProcessamento').checked,
+        coraConfirmado: document.getElementById('coraConfirmado').checked
     };
 
     fetch('/salvar', {
@@ -79,6 +137,8 @@ document.getElementById('btn_inserir_dados').addEventListener('click', () => {
 document.getElementById('btn_consultar').addEventListener('click', () => {
     const cnpj = campoConsulta.value;
     const modalCobranca = document.getElementById('modalCobranca');
+    const modalNeon = document.getElementById('modalNeon');
+    const modalCora = document.getElementById('modalCora');
 
     fetch('/consultar', {
         method: 'POST',
@@ -91,6 +151,8 @@ document.getElementById('btn_consultar').addEventListener('click', () => {
     })
     .then(data => {
         resultadoConsulta.innerText = `Nome: ${data.nome} | CNPJ: ${data.cnpj} | Protocolo: ${data.protocolo} | Mensagem: ${data.mensagem}`;
+        
+        // Mensagem padrão
         if (data.msgPadrao === true) {
            checkConsulta.checked = true;
            campoMsgPadraoConsulta.textContent = 'Habilitada'; 
@@ -99,8 +161,8 @@ document.getElementById('btn_consultar').addEventListener('click', () => {
             campoMsgPadraoConsulta.textContent = 'Desabilitada';
         }
 
+        // PIX/Cobrança
         const hasPix = data.pixUm === true || data.pixUm === 'true' || data.pixDois === true || data.pixDois === 'true';
-
         checkCobranca.checked = hasPix;
         campoMsgCobrancaConsulta.textContent = hasPix ? 'Habilitada' : 'Desabilitada';
 
@@ -113,6 +175,39 @@ document.getElementById('btn_consultar').addEventListener('click', () => {
             chavePixUm.checked = false;
             chavePixDois.checked = false;
         }
+
+        // Neon
+        const hasNeon = data.neonProcessamento === true || data.neonProcessamento === 'true' || 
+                       data.neonConfirmado === true || data.neonConfirmado === 'true';
+        checkNeonConsulta.checked = hasNeon;
+        campoMsgNeonConsulta.textContent = hasNeon ? 'Habilitada' : 'Desabilitada';
+
+        if (hasNeon) {
+            modalNeon.style.display = 'flex';
+            neonProcessamento.checked = data.neonProcessamento === true || data.neonProcessamento === 'true';
+            neonConfirmado.checked = data.neonConfirmado === true || data.neonConfirmado === 'true';
+        } else {
+            modalNeon.style.display = 'none';
+            neonProcessamento.checked = false;
+            neonConfirmado.checked = false;
+        }
+
+        // Cora
+        const hasCora = data.coraProcessamento === true || data.coraProcessamento === 'true' || 
+                       data.coraConfirmado === true || data.coraConfirmado === 'true';
+        checkCoraConsulta.checked = hasCora;
+        campoMsgCoraConsulta.textContent = hasCora ? 'Habilitada' : 'Desabilitada';
+
+        if (hasCora) {
+            modalCora.style.display = 'flex';
+            coraProcessamento.checked = data.coraProcessamento === true || data.coraProcessamento === 'true';
+            coraConfirmado.checked = data.coraConfirmado === true || data.coraConfirmado === 'true';
+        } else {
+            modalCora.style.display = 'none';
+            coraProcessamento.checked = false;
+            coraConfirmado.checked = false;
+        }
+
         campoMensagemAlterar.value = data.mensagem;
         
     })
@@ -136,6 +231,9 @@ document.getElementById('btn_apagar').addEventListener('click', () => {
         resultadoConsulta.innerText = msg;
         campoMensagemAlterar.value = '';
         checkConsulta.checked = false;
+        checkCobranca.checked = false;
+        checkNeonConsulta.checked = false;
+        checkCoraConsulta.checked = false;
     })
     .catch(err => {
         resultadoConsulta.innerText = 'Erro ao apagar';
@@ -149,17 +247,31 @@ document.getElementById('btn_alterar').addEventListener('click', () => {
     const msgPadrao = checkConsulta.checked;
     const pixUm = chavePixUm.checked;
     const pixDois = chavePixDois.checked;
+    const neonProc = neonProcessamento.checked;
+    const neonConf = neonConfirmado.checked;
+    const coraProc = coraProcessamento.checked;
+    const coraConf = coraConfirmado.checked;
 
     fetch('/alterar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cnpj, novaMensagem, msgPadrao, pixUm, pixDois })
+        body: JSON.stringify({ 
+            cnpj, 
+            novaMensagem, 
+            msgPadrao, 
+            pixUm, 
+            pixDois, 
+            neonProcessamento: neonProc, 
+            neonConfirmado: neonConf, 
+            coraProcessamento: coraProc, 
+            coraConfirmado: coraConf 
+        })
     })
     .then(res => res.text())
     .then(msg => {
         resultadoConsulta.innerText = msg;
     })
-        .catch(err => {
+    .catch(err => {
         resultadoConsulta.innerText = 'Erro ao alterar mensagem';
     });
 });
