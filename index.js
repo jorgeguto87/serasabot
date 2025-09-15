@@ -15,39 +15,39 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Endpoint atualizado para fornecer o status da conexão e o QR
 app.get('/status', (req, res) => {
-  res.json({
-    connected: isConnected,
-    qr: isConnected ? null : qrBase64
-  });
+    res.json({
+        connected: isConnected,
+        qr: isConnected ? null : qrBase64
+    });
 });
 
 // Inicializa o WhatsApp Client
 const client = new Client({
-  authStrategy: new LocalAuth({clientId: "serasa"}),
-  puppeteer: {
-       args: ['--no-sandbox', '--disable-setuid-sandbox']
-  }
+    authStrategy: new LocalAuth({ clientId: "serasa" }),
+    puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
 });
 
 client.on('qr', async qr => {
-  qrBase64 = await qrcode.toDataURL(qr);
-  isConnected = false;
-  console.log('📲 Novo QR Code gerado.');
+    qrBase64 = await qrcode.toDataURL(qr);
+    isConnected = false;
+    console.log('📲 Novo QR Code gerado.');
 });
 
 client.on('ready', () => {
-  isConnected = true;
-  console.log('✅ Chatbot conectado com sucesso!');
+    isConnected = true;
+    console.log('✅ Chatbot conectado com sucesso!');
 });
 
 app.listen(PORT, async () => {
-  const url = await ngrok.connect({
-    proto: 'http',
-    addr: PORT,
-    authtoken: '2xKwXMabicFsFQOYIn3sMTsJku7_4zo4mQzhjqqrabmL1SkhQ'
-  });
+    const url = await ngrok.connect({
+        proto: 'http',
+        addr: PORT,
+        authtoken: '2xKwXMabicFsFQOYIn3sMTsJku7_4zo4mQzhjqqrabmL1SkhQ'
+    });
 
-  console.log(`🌐 Acesse o QR Code em: ${url}`);
+    console.log(`🌐 Acesse o QR Code em: ${url}`);
 });
 
 client.initialize();
@@ -67,33 +67,33 @@ function saudacao() {
     return str;
 };
 
-function atendente(){
+function atendente() {
     const data = new Date();
     const hora = data.getHours();
     const dia = data.getDay();
     let str = '';
 
-    if (dia > 0 && dia < 6 && hora > 7 && hora < 19){
-        str = '⏳ *Aguarde um momento, por favor!*\n\n😃 Um de nossos atendentes irá atendê-lo(a) de forma exclusiva em instantes.';
-    
-    }else if (dia === 6 && hora > 8 && hora < 12){
+    if (dia > 0 && dia < 6 && hora > 7 && hora < 19) {
         str = '⏳ *Aguarde um momento, por favor!*\n\n😃 Um de nossos atendentes irá atendê-lo(a) de forma exclusiva em instantes.';
 
-    }else if(dia === 0){
+    } else if (dia === 6 && hora > 8 && hora < 12) {
+        str = '⏳ *Aguarde um momento, por favor!*\n\n😃 Um de nossos atendentes irá atendê-lo(a) de forma exclusiva em instantes.';
+
+    } else if (dia === 0) {
         str = '🏖️ *Aproveite o Domingo!*\n\n🕗 *Nosso horário de atendimento:*\n*Seg à Sex:* _07:00 às 19:00hs_\n*Sáb:* _08:00hs às 12:00hs_';
 
-    }else{
+    } else {
         str = '😕 *Ops! Nosso expediente já foi encerrado por hoje!*\n\n😃 Mas não se preocupe, assim que retornarmos iremos falar com você!\n\n🕗 *Nosso horário de atendimento:*\n*Seg à Sex:* _07:00 às 19:00hs_\n*Sáb:* _08:00hs às 12:00hs_';
     }
     return str;
 
 };
 
-const delay = ms => new Promise (res => setTimeout(res, ms));
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const state = {};
 
-client.on ('message', async msg => {
+client.on('message', async msg => {
 
     if (msg.isGroup || msg.from.endsWith('@g.us')) {
         return;
@@ -113,6 +113,69 @@ client.on ('message', async msg => {
         await delay(3000);
         await client.sendMessage(msg.from, img, { caption: texto });
     };
+
+    const imgNeon = MessageMedia.fromFilePath('./assets/neon_img.jpg');
+    const imgCora = MessageMedia.fromFilePath('./assets/cora_img.jpg');
+
+    async function msgNeonAnalise() {
+        const img = imgNeon;
+        const mensagem = "🏢 *Neon Pagamentos S.A.*\n\
+📄 *CNPJ:* 29.855.875/0001-82\n\n\
+⚠️ *Atenção:* Débitos registrados no *CNPJ* serão automaticamente transferidos para o *CPF dos sócios devedores*.\n\n\
+🔒 Após a negativação, todos os *bens ativos* poderão ser bloqueados para quitação dos débitos junto às redes bancárias de cartões de crédito.\n\
+🏠 *Imóveis*, 📦 *estoques* e outros ativos poderão ser convertidos em pagamento aos credores.\n\n\
+💳 *Status do Pagamento:*\n\
+⏳ Seu pagamento está em *análise para baixa*.\n\
+🔄 *Baixa em processamento.*\n\
+📌 Por favor, aguarde a confirmação.";
+
+        await enviarMensagemInicial(img, mensagem);
+
+    }
+
+    async function msgCoraAnalise() {
+        const img = imgCora;
+        const mensagem = "🏢 *Cora Sociedade de Crédito, Financiamento e Investimento S.A.*\n\
+📄 *CNPJ:* 37.880.206/0001-63\n\n\
+⚠️ *Atenção:* Débitos registrados no *CNPJ* serão automaticamente transferidos para o *CPF dos sócios devedores*.\n\n\
+🔒 Após a negativação, todos os *bens ativos* poderão ser bloqueados para quitação dos débitos junto às redes bancárias de cartões de crédito.\n\
+🏠 *Imóveis*, 📦 *estoques* e outros ativos poderão ser convertidos em pagamento aos credores.\n\n\
+💳 *Status do Pagamento:*\n\
+⏳ Seu pagamento está em *análise para baixa*.\n\
+🔄 *Baixa em processamento.*\n\
+📌 Por favor, aguarde a confirmação.";
+
+        await enviarMensagemInicial(img, mensagem);
+
+    }
+
+    async function msgNeonConfirmado() {
+        const img = imgNeon;
+        const mensagem = "🏢 *Neon Pagamentos S.A.*\n\
+📄 *CNPJ:* 29.855.875/0001-82\n\n\
+🎉 *Pagamento Confirmado!*\n\
+💳 Seu pagamento foi *processado com sucesso* e a baixa foi realizada.\n\n\
+📌 Situação regularizada junto às redes bancárias de cartões de crédito.\n\
+🔓 Nenhuma ação adicional é necessária no momento.\n\n\
+📅 Obrigado por manter seus débitos em dia!";
+
+        await enviarMensagemInicial(img, mensagem);
+
+    }
+
+    async function msgCoraConfirmado() {
+        const img = imgCora;
+        const mensagem = "🏢 *Cora Sociedade de Crédito, Financiamento e Investimento S.A.*\n\
+📄 *CNPJ:* 37.880.206/0001-63\n\n\
+🎉 *Pagamento Confirmado!*\n\
+💳 Seu pagamento foi *processado com sucesso* e a baixa foi realizada.\n\n\
+📌 Situação regularizada junto às redes bancárias de cartões de crédito.\n\
+🔓 Nenhuma ação adicional é necessária no momento.\n\n\
+📅 Obrigado por manter seus débitos em dia!";
+
+        await enviarMensagemInicial(img, mensagem);
+
+    }
 
     const from = msg.from;
     const mensagem = msg.body || msg.from.endsWith('@c.us');
@@ -153,7 +216,7 @@ client.on ('message', async msg => {
     const linkPixDois = 'https://atentus.com.br/eva/serasanovo/serasabot/public/ofertas2.html';
     const imagemPix = MessageMedia.fromFilePath('./assets/img_pix.jpg');
     const MAX_ATTEMPTS = 3;
-    
+
     if (!state[from]) state[from] = { attempts: 0, step: 0 };
     const userState = state[from];
 
@@ -166,7 +229,7 @@ client.on ('message', async msg => {
     } else if (userState.step === 1) {
         switch (mensagem) {
             case "1":
-                await enviarMensagemInicial (capa_site, '💁‍♀️ Para falar de *operadoras* será necessário direcionar o seu atendimento a um de nossos especialistas para um atendimento exclusivo!');
+                await enviarMensagemInicial(capa_site, '💁‍♀️ Para falar de *operadoras* será necessário direcionar o seu atendimento a um de nossos especialistas para um atendimento exclusivo!');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
                 return;
@@ -174,7 +237,7 @@ client.on ('message', async msg => {
             case "2":
                 await enviarMensagemInicial(megafone, '💡 *Evite restrições comprometendo o seu score!*\n\nNegocie sua dívida agora mesmo!')
                 await enviarMensagemTexto('Você pode negociar a sua dívida agora mesmo falando com um de nossos especialistas em um atendimento exclusivo!');
-                await enviarMensagemInicial(linksUteis, '💡 Clientes dos bancos *Bradesco, Santander, Getnet, Caixa Econômica Federal* e *Itaú* podem solicitar a baixa diretamente por meio do aplicativo oficial.\n\nCaso a negativação esteja registrada em *cartório*, também é possível realizar a baixa pelo app correspondente.\n\n📲 Caso deseje, posso encaminhar o *link para download.*\n\n*Por favor, selecione uma das opções abaixo:* 👇\n\n1️⃣ - *Getnet*\n2️⃣ - *Santander*\n3️⃣ - *Caixa Econômica Federal*\n4️⃣ - *Itaú*\n5️⃣ - *Bradesco*\n6️⃣ - *Cartório*\n7️⃣ - *Continuar com o atendimento*');           
+                await enviarMensagemInicial(linksUteis, '💡 Clientes dos bancos *Bradesco, Santander, Getnet, Caixa Econômica Federal* e *Itaú* podem solicitar a baixa diretamente por meio do aplicativo oficial.\n\nCaso a negativação esteja registrada em *cartório*, também é possível realizar a baixa pelo app correspondente.\n\n📲 Caso deseje, posso encaminhar o *link para download.*\n\n*Por favor, selecione uma das opções abaixo:* 👇\n\n1️⃣ - *Getnet*\n2️⃣ - *Santander*\n3️⃣ - *Caixa Econômica Federal*\n4️⃣ - *Itaú*\n5️⃣ - *Bradesco*\n6️⃣ - *Cartório*\n7️⃣ - *Continuar com o atendimento*');
                 state[from] = { step: 4 };
                 return;
 
@@ -187,7 +250,7 @@ client.on ('message', async msg => {
             case "4":
                 await enviarMensagemInicial(alegria, '*Negocie e limpe o seu nome!*\n\n💬 Regularize sua situação financeira com agilidade e segurança.');
                 await enviarMensagemTexto('Você pode regularizar o seu nome agora mesmo falando com um de nossos especialistas em um atendimento exclusivo!');
-                await enviarMensagemInicial(linksUteis, '💡 Clientes dos bancos *Bradesco, Santander, Getnet, Caixa Econômica Federal* e *Itaú* podem solicitar a baixa diretamente por meio do aplicativo oficial.\n\nCaso a negativação esteja registrada em *cartório*, também é possível realizar a baixa pelo app correspondente.\n\n📲 Caso deseje, posso encaminhar o link para download.\nPor favor, selecione uma das opções abaixo: 👇\n\n1️⃣ - *Getnet*\n2️⃣ - *Santander*\n3️⃣ - *Caixa Econômica Federal*\n4️⃣ - *Itaú*\n5️⃣ - *Bradesco*\n6️⃣ - *Cartório*\n7️⃣ - *Continuar com o atendimento*');           
+                await enviarMensagemInicial(linksUteis, '💡 Clientes dos bancos *Bradesco, Santander, Getnet, Caixa Econômica Federal* e *Itaú* podem solicitar a baixa diretamente por meio do aplicativo oficial.\n\nCaso a negativação esteja registrada em *cartório*, também é possível realizar a baixa pelo app correspondente.\n\n📲 Caso deseje, posso encaminhar o link para download.\nPor favor, selecione uma das opções abaixo: 👇\n\n1️⃣ - *Getnet*\n2️⃣ - *Santander*\n3️⃣ - *Caixa Econômica Federal*\n4️⃣ - *Itaú*\n5️⃣ - *Bradesco*\n6️⃣ - *Cartório*\n7️⃣ - *Continuar com o atendimento*');
                 state[from] = { step: 4 };
                 return;
 
@@ -220,7 +283,7 @@ client.on ('message', async msg => {
             case "8":
                 await enviarMensagemInicial(pericles, '*Negocie e limpe o seu nome!*\n\n💬 Regularize sua situação financeira com agilidade e segurança.');
                 await enviarMensagemTexto('Você pode regularizar o seu nome agora mesmo falando com um de nossos especialistas em um atendimento exclusivo!');
-                await enviarMensagemInicial(linksUteis, '💡 Clientes dos bancos *Bradesco, Santander, Getnet, Caixa Econômica Federal* e *Itaú* podem solicitar a baixa diretamente por meio do aplicativo oficial.\n\nCaso a negativação esteja registrada em *cartório*, também é possível realizar a baixa pelo app correspondente.\n\n📲 Caso deseje, posso encaminhar o link para download.\nPor favor, selecione uma das opções abaixo: 👇\n\n1️⃣ - *Getnet*\n2️⃣ - *Santander*\n3️⃣ - *Caixa Econômica Federal*\n4️⃣ - *Itaú*\n5️⃣ - *Bradesco*\n6️⃣ - *Cartório*\n7️⃣ - *Continuar com o atendimento*');           
+                await enviarMensagemInicial(linksUteis, '💡 Clientes dos bancos *Bradesco, Santander, Getnet, Caixa Econômica Federal* e *Itaú* podem solicitar a baixa diretamente por meio do aplicativo oficial.\n\nCaso a negativação esteja registrada em *cartório*, também é possível realizar a baixa pelo app correspondente.\n\n📲 Caso deseje, posso encaminhar o link para download.\nPor favor, selecione uma das opções abaixo: 👇\n\n1️⃣ - *Getnet*\n2️⃣ - *Santander*\n3️⃣ - *Caixa Econômica Federal*\n4️⃣ - *Itaú*\n5️⃣ - *Bradesco*\n6️⃣ - *Cartório*\n7️⃣ - *Continuar com o atendimento*');
                 state[from] = { step: 4 };
                 return;
 
@@ -245,7 +308,7 @@ client.on ('message', async msg => {
                         '❌ *Número de tentativas excedido!*\nAtendimento finalizado!\n\nDigite *Oi* para iniciar.'
                     );
                     state[from] = { step: 0, attempts: 0 };
-                    delete state[from]; 
+                    delete state[from];
                 } else {
                     await client.sendMessage(
                         msg.from,
@@ -267,7 +330,7 @@ client.on ('message', async msg => {
                 await enviarMensagemInicial(sumup, mensagemCartao);
                 await enviarMensagemTexto('🎯 *Nossa equipe de especialistas está pronta para te ajudar com este processo.*\n\n_Caso queira um atendimento para a regularização imediata é só digitar a opção *1* após o menu abaixo._');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
-                state[from] = { step: 3 }; 
+                state[from] = { step: 3 };
                 return;
 
             case "3":
@@ -353,7 +416,7 @@ client.on ('message', async msg => {
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
                 return;
-                
+
 
             default:
                 if (userState.attempts === undefined) userState.attempts = 0;
@@ -365,7 +428,7 @@ client.on ('message', async msg => {
                         '❌ *Número de tentativas excedido!*\nAtendimento finalizado!\n\nDigite *Oi* para iniciar.'
                     );
                     state[from] = { step: 0, attempts: 0 };
-                    delete state[from]; 
+                    delete state[from];
                 } else {
                     await client.sendMessage(
                         msg.from,
@@ -374,8 +437,8 @@ client.on ('message', async msg => {
                 }
                 return;
         }
-    }else if (userState.step === 3) {
-        switch(mensagem) {
+    } else if (userState.step === 3) {
+        switch (mensagem) {
             case "1":
                 await enviarMensagemTexto(`${atendimento}`);
                 state[from] = { step: 5 };
@@ -392,7 +455,7 @@ client.on ('message', async msg => {
                 delete state[from];
                 return;
 
-              
+
             default:
                 if (userState.attempts === undefined) userState.attempts = 0;
                 userState.attempts++;
@@ -403,7 +466,7 @@ client.on ('message', async msg => {
                         '❌ *Número de tentativas excedido!*\nAtendimento finalizado!\n\nDigite *Oi* para iniciar.'
                     );
                     state[from] = { step: 0, attempts: 0 };
-                    delete state[from]; 
+                    delete state[from];
                 } else {
                     await client.sendMessage(
                         msg.from,
@@ -412,8 +475,8 @@ client.on ('message', async msg => {
                 }
                 return;
         }
-    }else if (userState.step === 4) {
-        switch(mensagem) {
+    } else if (userState.step === 4) {
+        switch (mensagem) {
             case "1":
                 await enviarMensagemTexto('💡 - Você que é cliente *Getnet* pode solicitar sua baixa através do aplicativo.\n\n➡️ - *Link para baixar no Google Play.* 👇\nhttps://play.google.com/store/apps/details?id=br.com.getnet.supergetmobile&hl=pt_BR\n\n➡️ - *Link para baixar na App Store.* 👇\nhttps://apps.apple.com/br/app/getnet-brasil/id1461510055');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
@@ -437,25 +500,25 @@ client.on ('message', async msg => {
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
                 return;
-    
+
             case "5":
                 await enviarMensagemTexto('💡 - Você que é cliente *Bradesco* pode solicitar sua baixa através do aplicativo.\n\n➡️ - *Link para baixar no Google Play.* 👇\nhttps://play.google.com/store/apps/details?id=com.bradesco&hl=pt_BR\n\n➡️ - *Link para baixar na App Store.* 👇\nhttps://apps.apple.com/br/app/banco-bradesco/id336954985');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
                 return;
-    
+
             case "6":
                 await enviarMensagemTexto('💡 - Para negativações registradas em *Cartório* você pode solicitar sua baixa através do aplicativo *CENPROT - Consulta de Protestos.*\n\n➡️ - *Link para baixar no Google Play.* 👇\nhttps://play.google.com/store/apps/details?id=br.com.timepix.cenprot\n\n➡️ - *Link para baixar na App Store.* 👇\nhttps://play.google.com/store/apps/details?id=br.com.timepix.cenprot');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
                 return;
-    
+
             case "7":
                 await enviarMensagemTexto('💬 *Tudo Bem!*\nVamos dar continuidade ao seu atendimento.');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
                 return;
-    
+
             default:
                 if (userState.attempts === undefined) userState.attempts = 0;
                 userState.attempts++;
@@ -466,7 +529,7 @@ client.on ('message', async msg => {
                         '❌ *Número de tentativas excedido!*\nAtendimento finalizado!\n\nDigite *Oi* para iniciar.'
                     );
                     state[from] = { step: 0, attempts: 0 };
-                    delete state[from]; 
+                    delete state[from];
                 } else {
                     await client.sendMessage(
                         msg.from,
@@ -475,21 +538,21 @@ client.on ('message', async msg => {
                 }
                 return;
         }
-    }else if (userState.step === 5){
-        if (saudacoes.some(ignorar => msg.body.includes(ignorar))){
+    } else if (userState.step === 5) {
+        if (saudacoes.some(ignorar => msg.body.includes(ignorar))) {
             await delay(2700000);
             delete state[from];
             return;
-       
-        }else if(!saudacoes.some(ignorando => msg.body.includes(ignorando))){
+
+        } else if (!saudacoes.some(ignorando => msg.body.includes(ignorando))) {
             await delay(2700000);
             delete state[from];
             return;
 
         }
-    }else if (userState.step === 6) {
+    } else if (userState.step === 6) {
         const protocoloBuscado = msg.body.trim();
-    
+
         fs.readFile('data.txt', 'utf-8', async (err, data) => {
             if (err) {
                 await enviarMensagemTexto('❌ Erro ao ler os dados. Tente novamente mais tarde.');
@@ -497,17 +560,17 @@ client.on ('message', async msg => {
                 state[from] = { step: 3 };
                 return;
             }
-    
+
             const linhas = data.split('\n').filter(l => l.trim() !== '');
             const resultado = linhas.find(linha => linha.startsWith(protocoloBuscado + ';'));
-    
+
             if (!resultado) {
                 await enviarMensagemTexto('🔍 Protocolo não encontrado. Verifique o número e tente novamente.');
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
                 return;
             }
-    
+
             const [protocolo, nome, cnpj, mensagemCliente, msgPadrao, pixUm, pixDois] = resultado.split(';');
             const imagemBaixado = MessageMedia.fromFilePath('./assets/img_baixado.jpg');
 
@@ -516,34 +579,34 @@ client.on ('message', async msg => {
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
 
-            }else if(pixUm === 'true'){
+            } else if (pixUm === 'true') {
                 await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
                 enviarMensagemInicial(imagemPix, msgPix);
                 enviarMensagemTexto(linkPixUm);
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
 
-            }else if(pixDois === 'true'){
+            } else if (pixDois === 'true') {
                 await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
                 enviarMensagemInicial(imagemPix, msgPix);
                 enviarMensagemTexto(linkPixDois);
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
-                
-            }else{
+
+            } else {
                 await enviarMensagemTexto(`📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* ${mensagemCliente}`);
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
             }
 
-            
 
 
-    
+
+
         });
         return;
     }
-    
+
 });
 
 
