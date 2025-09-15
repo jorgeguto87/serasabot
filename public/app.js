@@ -8,6 +8,35 @@ const resultadoConsulta = document.querySelector('.resultado_consulta');
 const campoMsgPadrao = document.getElementById('msgPadrao');
 const campoMsgPadraoConsulta = document.getElementById('msgPadraoEsp');
 const checkConsulta = document.getElementById('campoPadraoConsulta');
+const modalCobranca = document.getElementById('modalCobranca');
+const checkCobranca = document.getElementById('campoCobrancaConsulta');
+const campoMsgCobrancaConsulta = document.getElementById('msgCobrancaEsp');
+const chavePixUm = document.getElementById('chavePixUm');
+const chavePixDois = document.getElementById('chavePixDois');
+
+
+//Habilitar mensagem Cobranca
+function msgCobranca() {
+    if (document.getElementById('campoCobranca').checked) {
+        document.getElementById('msgCobranca').textContent = 'Habilitada';
+        document.getElementById('modalCobranca').style.display = 'flex';
+    }else if(document.getElementById('campoCobrancaConsulta').checked) { 
+        document.getElementById('msgCobrancaEsp').textContent = 'Habilitada';
+        document.getElementById('modalCobranca').style.display = 'flex';
+    }else {
+        document.getElementById('msgCobranca').textContent = 'Desabilitada';
+    }
+}
+
+function fecharModalCobranca() {
+    document.getElementById('modalCobranca').style.display = 'none';
+}
+
+window.addEventListener('click', function(event){
+    if (event.target === modalCobranca){
+        fecharModalCobranca();
+    }
+});
 
 // Habilitar mensagem padrão
 function msgPadrao() {
@@ -31,7 +60,9 @@ document.getElementById('btn_inserir_dados').addEventListener('click', () => {
         nome: campoNome.value,
         cnpj: campoCnpj.value,
         mensagem: campoMensagem.value,
-        mensPadrao: document.getElementById('campoPadrao').checked
+        mensPadrao: document.getElementById('campoPadrao').checked,
+        pixUm: document.getElementById('chavePixUm').checked,
+        pixDois: document.getElementById('chavePixDois').checked
     };
 
     fetch('/salvar', {
@@ -47,6 +78,7 @@ document.getElementById('btn_inserir_dados').addEventListener('click', () => {
 // Consultar cliente
 document.getElementById('btn_consultar').addEventListener('click', () => {
     const cnpj = campoConsulta.value;
+    const modalCobranca = document.getElementById('modalCobranca');
 
     fetch('/consultar', {
         method: 'POST',
@@ -65,6 +97,21 @@ document.getElementById('btn_consultar').addEventListener('click', () => {
         } else {
             checkConsulta.checked = false;
             campoMsgPadraoConsulta.textContent = 'Desabilitada';
+        }
+
+        const hasPix = data.pixUm === true || data.pixUm === 'true' || data.pixDois === true || data.pixDois === 'true';
+
+        checkCobranca.checked = hasPix;
+        campoMsgCobrancaConsulta.textContent = hasPix ? 'Habilitada' : 'Desabilitada';
+
+        if (hasPix) {
+            modalCobranca.style.display = 'flex';
+            chavePixUm.checked = data.pixUm === true || data.pixUm === 'true';
+            chavePixDois.checked = data.pixDois === true || data.pixDois === 'true';
+        } else {
+            modalCobranca.style.display = 'none';
+            chavePixUm.checked = false;
+            chavePixDois.checked = false;
         }
         campoMensagemAlterar.value = data.mensagem;
         
@@ -100,11 +147,13 @@ document.getElementById('btn_alterar').addEventListener('click', () => {
     const cnpj = campoConsulta.value;
     const novaMensagem = campoMensagemAlterar.value;
     const msgPadrao = checkConsulta.checked;
+    const pixUm = chavePixUm.checked;
+    const pixDois = chavePixDois.checked;
 
     fetch('/alterar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cnpj, novaMensagem, msgPadrao})
+        body: JSON.stringify({ cnpj, novaMensagem, msgPadrao, pixUm, pixDois })
     })
     .then(res => res.text())
     .then(msg => {

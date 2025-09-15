@@ -1,0 +1,655 @@
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&family=League+Spartan:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Truculenta:opsz,wght@12..72,100..900&display=swap');
+
+:root{
+    --fontePrimaria: 'League Spartan', sans-serif;
+    --fonteSecundaria: 'Krona One', sans-serif;
+    --fonteTercearia: 'Montserrat', sans-serif;
+    --fonteQuartenaria: 'Open Sans', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+body{
+    height: 100vh;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.nuvem{
+    height: 9.375rem;
+    width: auto;
+}
+
+.logo{
+    height: 9.375rem;
+    width: auto;
+}
+
+.texto__topo{
+    font-family: var(--fontePrimaria);
+    text-align: center;
+    font-size: 2.25rem;
+}
+
+.menu{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    gap: 9.375rem;
+    margin: 1rem;
+}
+
+.menu__ofertas__texto{
+    font-family: var(--fontePrimaria);
+    font-size: 1.5rem;
+    color:black;
+    cursor: pointer;
+}
+
+.menu__ofertas__texto:hover{
+    font-weight: 800;
+}
+
+.menu__acordos__texto{
+    font-family: var(--fontePrimaria);
+    font-size: 1.5rem;
+    color:grey;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.menu__acordos__texto:hover{
+    font-weight: 800;
+}
+
+
+.menu__line__pink{
+    width: 9.375rem;
+    height: auto;
+}
+
+.menu__ofertas{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.barra__feirao{
+    height: 4rem;
+    width: 65rem;
+    border-radius: 0.5rem;
+    background-color: #Ea3a9c;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.texto__feirao{
+    font-family: var(--fontePrimaria);
+    font-size: 2.25rem;
+    color: #ffffff;
+}
+
+.corpo__negociacao{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 65rem;
+    height:auto;
+    margin:auto;
+    margin-top: 1rem;
+}
+
+.corpo__negociacao__texto__cima{
+    font-family: var(--fonteQuartenaria);
+    font-size: 1.5rem;
+}
+
+.corpo__negociacao__texto__baixo{
+    font-family: var(--fonteQuartenaria);
+    font-size: 3.75rem;
+}
+
+.corpo__negociacao__valores{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.corpo__negociacao__cartoes{
+    height: 15rem;
+    width: auto;
+}
+
+.corpo__inferior{
+    display: flex;
+    flex-direction: column;
+    width: 65rem;
+    height: auto;
+    margin:auto;
+}
+
+.negociacao__barra{
+    width: 26.25rem;
+    height: auto;
+}
+
+.acordos{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    margin: auto;
+    margin-top: 1rem; 
+    gap: 3rem;  
+    margin-left: 0;
+    margin-bottom: 2rem; 
+}
+
+.acordo__aceito{
+    height: 4rem;
+    width: 26.25rem;
+    border-radius: 1rem;
+    background-color: #Ea3a9c;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acordo__aceito__texto{
+    font-family: var(--fontePrimaria);
+    font-size: 2.25rem;
+    color: #ffffff;
+}
+
+.acordo__cart__imagem{
+    height: 3rem;
+    width: auto;
+    cursor: pointer;
+}
+
+.acordo__cart__borda{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4rem;
+    width: 7.5rem;
+    border-radius: 1rem;
+    border-color: #Ea3a9c;
+    border-style: solid;
+}
+
+.texto__protocolo{
+    font-family: var(--fontePrimaria);
+    font-size: 1.5rem;
+}
+
+.numero__protocolo{
+    font-family: var(--fonteQuartenaria);
+    font-size: 1rem;
+}
+
+.pagamento{
+    width: 36.75rem;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.box__protocolo{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 26.25rem;
+    height: auto;
+}
+
+.pagamento__button{
+    font-family: var(--fontePrimaria);
+    font-size: 1.5rem;
+    color: #Ea3a9c;
+    cursor: pointer;
+}
+
+.pagamento__button:hover{
+    font-weight: 800;
+}
+
+.texto__check{
+    font-family: var(--fontePrimaria);
+    font-size: 1.25rem;
+}
+
+.imagem__check{
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.check__container{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+footer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem;
+    margin-bottom: 0;
+}
+
+.imagem__footer{
+    width: 1.5rem;
+    height: auto;
+}
+
+.texto__footer{
+    font-family: var(--fontePrimaria);
+    font-size: 1.25rem;
+}
+
+.acordos__main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh; /* ajusta centralização */
+    text-align: center;
+    gap: 1rem;
+}
+
+.acordos__icone {
+    max-width: 120px;
+    opacity: 0.8;
+}
+
+.acordos__titulo {
+    font-family: var(--fontePrimaria);
+    font-size: 1.5rem;
+    color: #Ea3a9c;
+}
+
+.acordos__mensagem {
+    font-family: var(--fonteQuartenaria);
+    font-size: 1rem;
+    color: #555;
+    max-width: 400px;
+}
+
+.acordos__botao {
+    background: #Ea3a9c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-family: var(--fontePrimaria);
+}
+
+.acordos__botao:hover {
+    background: #c92a7a;
+}
+
+/* Fundo do modal */
+.modal-pagamento {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Conteúdo do modal */
+.modal-pagamento__conteudo {
+  display: flex;
+  flex-direction: column; 
+  align-content: center;
+  margin: auto; 
+  align-items: center;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+  position: relative;
+}
+
+/* Botão fechar */
+.modal-pagamento__fechar {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #Ea3a9c;
+}
+
+/* Logo */
+.modal-pagamento__logo {
+  width: 40px;
+  margin-bottom: 1rem;
+}
+
+/* QR Code */
+.modal-pagamento__qrcode {
+  width: 200px;
+  margin-bottom: 1rem;
+}
+
+/* ID do QR Code */
+.modal-pagamento__id {
+  font-size: 1.5rem;
+  word-break: break-all;
+  background: #f8f8f8;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--fontePrimaria);
+}
+
+/* Texto adicional */
+.modal-pagamento__texto {
+  font-family: var(--fontePrimaria); 
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.add__carrinho {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.texto__popup__carrinho{
+    font-family: var(--fontePrimaria);
+    font-size: 1.5rem;
+}
+
+/* Media Queries para Mobile */
+@media (max-width: 1024px) {
+    body {
+        padding: 0;
+        margin: 0.5rem;
+        height: 100vh;
+    }
+    
+    header {
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-top: 0.5rem;
+        align-content: center;
+        justify-content: center;
+    }
+
+    /*main{
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+    */
+    .nuvem, .logo {
+        max-height: 5rem;
+    }
+    
+    .texto__topo {
+        font-size: 1.125rem;
+        margin: 0.25rem 0;
+    }
+    
+    .menu {
+        gap: 1.5rem;
+        margin: 0.5rem;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .menu__ofertas__texto,
+    .menu__acordos__texto {
+        font-size: 0.9rem;
+    }
+    
+    .menu__line__pink {
+        width: 3rem;
+    }
+    
+    .barra__feirao {
+        width: 85%;
+        height: 2.5rem;
+        padding: 0 0.5rem;
+        max-width: 85%;
+        margin: 0.5rem auto;
+        margin-bottom: 1.5rem;
+    }
+    
+    .texto__feirao {
+        font-size: 0.875rem;
+    }
+    
+    .corpo__negociacao {
+        max-width: 75%;
+        padding: 0 0.5rem;
+        margin: 0.5rem auto;
+        max-width: 85%;
+        gap: 1rem;
+        justify-content: space-around;
+    }
+    
+    .corpo__negociacao__texto__cima {
+        font-size: 0.875rem;
+    }
+    
+    .corpo__negociacao__texto__baixo {
+        font-size: 1.65rem;
+    }
+    
+    .corpo__negociacao__cartoes {
+        max-height: 5rem;
+        width: auto;
+    }
+    
+    .corpo__inferior {
+        width: 85%;
+        padding: 0 0.5rem;
+        max-width: 85%;
+    }
+    
+    .negociacao__barra {
+        width: 100%;
+        max-width: 15rem;
+        justify-content: center;
+        margin: 1rem auto;        
+    }
+    
+    .acordos {
+        gap: 2rem;
+        margin: auto;
+        margin-bottom: 0.75rem;
+        margin-top: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+    
+    .acordo__aceito {
+        width: 100%;
+        max-width: 15rem;
+        height: 2.5rem;
+    }
+    
+    .acordo__aceito__texto {
+        font-size: 0.875rem;
+        padding: 2rem;
+    }
+    
+    .acordo__cart__borda {
+        width: 4rem;
+        height: 2.5rem;
+    }
+    
+    .acordo__cart__imagem {
+        height: 1.5rem;
+        padding: 2rem;
+    }
+    
+    .pagamento {
+        width: 100%;
+        gap: 0.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .box__protocolo {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .texto__protocolo {
+        font-size: 1.125rem;
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .numero__protocolo {
+        font-size: 0.8rem;
+        word-break:normal;
+        line-height: 1.2;
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .pagamento__button {
+        font-size: 1.125rem;
+        align-self:center;
+        text-align: center;
+    }
+    
+    .texto__check {
+        font-size: 0.75rem;
+        
+    }
+    
+    .imagem__check {
+        height: 0.875rem;
+        width: 0.875rem;
+    }
+    
+    .check__container {
+        margin-top: 0.5rem;
+        gap: 0.5rem;
+        align-content: center;
+        justify-content: center;
+    }
+    
+    .texto__footer {
+        font-size: 0.75rem;
+    }
+    
+    .imagem__footer {
+        width: 0.875rem;
+    }
+    
+    footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem 0;
+    text-align: center;
+    background: white;
+    }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0.75rem;
+        text-align: center;
+        background: white;
+    }
+
+    /* Ajustes específicos do conteúdo em landscape */
+    .corpo__negociacao {
+        max-width: 75%;
+        padding: 0 0.5rem;
+        margin: 0.5rem auto;
+        max-width: 85%;
+        gap: 1rem;
+        justify-content: space-around;
+    }
+    
+    .corpo__negociacao__texto__cima {
+        font-size: 1rem;
+    }
+    
+    .corpo__negociacao__texto__baixo {
+        font-size: 2rem;
+    }
+    
+    .corpo__negociacao__cartoes {
+        max-height: 7rem;
+        width: auto;
+    }
+
+    .check__container {
+        margin-top: 0.5rem;
+        gap: 0.3rem;
+        align-content: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 4rem;
+    }
+
+    .acordos__botao{
+        margin-bottom: 8rem;
+    }
+
+    .acordos__main{
+        margin-top: 3.5rem;
+        margin-bottom: 5rem;
+    }
+}

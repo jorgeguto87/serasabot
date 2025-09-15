@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protocolo</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="img/png" href="/assets/favicon.png">
 </head>
 <body>
     <header class="cabecalho">
@@ -35,10 +36,17 @@
                 <section class="principal_mensagem">
                     <textarea id="campo_mensagem" placeholder="Adicione a mensagem ao cliente" class="input_mensagem"></textarea>
                 </section>
+                <div clas="container__check">
                 <div class="check__msg">
                     <input class="check" type="checkbox" id="campoPadrao" name="msg" onclick="msgPadrao()">
                     <p class="check__label">Mensagem padrão</p>
                     <p class="check__label" id="msgPadrao">Desabilitada</p>
+                </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoCobranca" name="msg" onclick="msgCobranca()">
+                    <p class="check__label">Enviar cobrança</p>
+                    <p class="check__label" id="msgCobranca">Desabilitada</p>
+                </div>
                 </div>
 
                 <section class="principal_inserir">
@@ -59,10 +67,17 @@
             <div class="caixa_resultado_consulta">    
                 <h2 class="resultado_consulta"></h2>
                 <textarea id="campo_mensagem_alterar" placeholder="Adicione uma mensagem para alterar" class="input_mensagem_alterar"></textarea>
+                <div class="container__check">
                 <div class="check__msg">
                     <input class="check" type="checkbox" id="campoPadraoConsulta" name="msg" onclick="msgPadrao()">
                     <p class="check__label">Mensagem padrão</p>
                     <p class="check__label" id="msgPadraoEsp"></p>
+                </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="campoCobrancaConsulta" name="msg" onclick="msgCobranca()">
+                    <p class="check__label">Enviar cobrança</p>
+                    <p class="check__label" id="msgCobrancaEsp"></p>
+                </div>
                 </div>
                 <div class="botoes_alteracao">
                 <button class="botao_principal" id="btn_alterar">Alterar Mensagem</button>
@@ -76,6 +91,27 @@
         <p class="mensagem_rodape">Desenvolvido por Atentus Cloud</p>
         <p class="mensagem_rodape" href="https://atentus.cloud">https://atentus.cloud</p>
     </footer>
+
+    <!--MODAL DE COBRANÇA-->
+    <div class="container__modalCobranca" id="modalCobranca">
+        <div class="modalCobranca__conteudo">
+            <span class="modalCobranca__fechar" onclick="fecharModalCobranca()">&times;</span>
+            <img src="s_serasa.png" alt="Logo Serasa" class="modalCobranca__logo">
+            <h2 class="texto__modalCobranca__titulo">Selecione a chave de PIX</h2>
+            <div class="container__check">
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="chavePixUm" name="msg" onclick="enviarPixUm()">
+                    <p class="check__label">admfacil14@gmail.com</p>
+                    <p class="check__label" id="msgPixUm"></p>
+                </div>
+                <div class="check__msg">
+                    <input class="check" type="checkbox" id="chavePixDois" name="msg" onclick="enviarPixDois()">
+                    <p class="check__label">admnegociacao7@gmail.com</p>
+                    <p class="check__label" id="msgPixDois"></p>
+                </div>
+                </div>
+        </div>
+    </div>
 
     <script src="./app.js"></script>
 </body>
